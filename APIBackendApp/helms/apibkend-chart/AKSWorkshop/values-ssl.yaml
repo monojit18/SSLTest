@@ -1,0 +1,44 @@
+deployment:
+  name: apibkend-deploy
+  namespace: ssltest
+  labels:
+    app: apibkend-deploy
+    version: v1
+  selectorLabels:
+    app: apibkend-pod
+    version: v1
+  replicas: 1
+  strategyType: RollingUpdate
+  maxSurge: 1
+  maxUnavailable: 1
+  nodeSelector:
+    agentpool: aksapipool
+  containers:
+  - name: apibkend-app
+    image: akswkshpacr.azurecr.io/apibkendapp:v1.0.0
+    imagePullPolicy: IfNotPresent
+    memoryRequest: "64Mi"
+    cpuRequest: "100m"
+    memoryLimit: "128Mi"
+    cpuLimit: "200m"
+    containerPorts: [9081, 9443]    
+    env:    
+    - name: KEY_FILENAME
+      value: "/Certs/Star-Internal-WkshpDev/PFXs/star.internal.wkshpdev.com.key"
+    - name: CERT_FILENAME
+      value: "/Certs/Star-Internal-WkshpDev/PEMs/star_internal_wkshpdev_com.pem"
+service:
+  name: apibkend-service
+  namespace: ssltest
+  selector:
+    app: apibkend-pod
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    name: http
+    port: 80
+    targetPort: 9081
+  - protocol: TCP
+    name: https
+    port: 443
+    targetPort: 9443

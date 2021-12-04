@@ -1,0 +1,17 @@
+tenantId=""
+subscriptionId=""
+resourceGroup="aks-workshop-rg"
+acrName=""
+
+az login --tenant $tenantId
+
+#PEM
+az acr build -t apibkendapp:v1.0.0 -r $acrName .
+
+#PFX
+az acr build -t apibkendapp-pfx:v1.0.0 -r $acrName .
+SSL passthrough cannot work with path based routing based on the nature of SSL
+
+helm install apibkend-chart -n ssltest ./apibkend-chart/ -f ./apibkend-chart/AKSWorkshopPrv/values-ssl.yaml
+helm upgrade apibkend-chart -n ssltest ./apibkend-chart/ -f ./apibkend-chart/AKSWorkshopPrv/values-ssl.yaml
+#helm uninstall apibkend-chart -n ssltest

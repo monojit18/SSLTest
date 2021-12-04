@@ -1,0 +1,17 @@
+tenantId=""
+subscriptionId=""
+resourceGroup="aks-workshop-rg"
+acrName=""
+
+az login --tenant $tenantId
+
+#PEM
+az acr build -t apiproxyapp:v1.0.0 -r $acrName .
+
+#PFX
+az acr build -t apiproxyapp-pfx:v1.0.0 -r $acrName .
+SSL passthrough cannot work with path based routing based on the nature of SSL
+
+helm install apiproxy-chart -n ssltest ./apiproxy-chart/ -f ./apiproxy-chart/AKSWorkshop/values-ssl.yaml
+helm upgrade apiproxy-chart -n ssltest ./apiproxy-chart/ -f ./apiproxy-chart/AKSWorkshop/values-ssl.yaml
+#helm uninstall apiproxy-chart -n ssltest

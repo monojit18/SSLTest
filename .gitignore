@@ -1,0 +1,7 @@
+!.gitignore
+**/misc/commands.txt
+**/Certs/**
+**/logs/**
+**/node_modules/**
+**/package*.json
+**/.env
