@@ -26,9 +26,9 @@ deployment:
     - name: API_URL
       value: "https://apibkendwks.internal.wkshpdev.com"
     - name: KEY_FILENAME
-      value: "/Certs/Star-Internal-WkshpDev/PFXs/star.internal.wkshpdev.com.key"
+      value: ""
     - name: CERT_FILENAME
-      value: "/Certs/Star-Internal-WkshpDev/PEMs/star_internal_wkshpdev_com.pem"
+      value: ""
 service:
   name: apiproxy-service
   namespace: ssltest
