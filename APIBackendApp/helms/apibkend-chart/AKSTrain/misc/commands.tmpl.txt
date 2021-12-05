@@ -3,7 +3,7 @@ subscriptionId=""
 resourceGroup="aks-train-rg"
 acrName=""
 
-az login --tenant $tenantId
+az login --tenant $tenantId 
 
 #PEM
 az acr build -t apibkendapp:v1.0.0 -r $acrName .
