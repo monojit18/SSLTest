@@ -15,14 +15,14 @@ deployment:
     agentpool: aksapipool
   containers:
   - name: apiproxy-app
-    image: akswkshpprvacr.azurecr.io/apiproxyapp:v1.0.0
+    image: akswkshpprvacr.azurecr.io/apiproxyapp:v1.1.3
     imagePullPolicy: IfNotPresent
     memoryRequest: "64Mi"
     cpuRequest: "100m"
     memoryLimit: "128Mi"
     cpuLimit: "200m"
     containerPorts: [8081, 8443]    
-    env:
+    env:    
     - name: API_URL
       value: ""
     - name: KEY_FILENAME
