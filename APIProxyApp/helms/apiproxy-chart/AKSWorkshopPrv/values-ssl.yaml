@@ -24,7 +24,7 @@ deployment:
     containerPorts: [8081, 8443]    
     env:
     - name: API_URL
-      value: "https://apibkendwks.internal.wkshpdev.com"
+      value: ""
     - name: KEY_FILENAME
       value: ""
     - name: CERT_FILENAME

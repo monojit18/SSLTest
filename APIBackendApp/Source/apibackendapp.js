@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 8 */
 
 const Express = require('express');
 const Path = require("path");
@@ -6,8 +6,12 @@ const Http = require("http");
 const Https = require("https");
 const FS = require("fs");
 const DotEnv = require("dotenv");
+const Cosmos = require("@azure/cosmos");
 
 const _express = Express();
+_express.use(Express.urlencoded({extended:false}));
+_express.use(Express.json());
+
 const _httpServer = Http.createServer(_express);
 DotEnv.config();
 
@@ -27,18 +31,84 @@ const _httpsServer = Https.createServer(tlsCreds, _express);
 // };
 // const _httpsServer = Https.createServer(options, _express);
 
-_express.get('/', (req, res) =>
-{
-    
-    res.send('This is apibackendapp GET');
+const cosmosEndpoint = process.env["COSMOSDB_ENDPOINT"];
+const cosmosKey = process.env["COSMOSDB_KEY"];
+
+const cosmosClient = new Cosmos.CosmosClient({
+
+    endpoint: cosmosEndpoint,
+    key: cosmosKey
 
 });
 
-_express.post('/api/post', (req, res) =>
-{
-    
-    res.send('This is apibackendapp POST\n');
+const db = cosmosClient.database("bkenddb");
+const container = db.container("bkendcnt");
 
+_express.get('/bkend/:id', (req, res) =>
+{
+        
+    const id = req.params.id;
+    const pkey = parseInt(req.query.pk);
+    container.item(id, pkey).read().then((itemResponse) =>
+    {
+
+        if (itemResponse.statusCode >= 400)
+            throw (new Error(itemResponse.statusCode.toString()));
+
+        console.log(itemResponse.resource);
+        res.send(itemResponse.resource);
+
+    }).catch(ex =>
+    {
+
+        console.log(ex);
+        
+        const errorCode = parseInt(ex.message);
+        res.statusCode = (errorCode === NaN) ? 500 : errorCode;
+        res.send(ex);
+
+    }); 
+});
+
+_express.post('/bkend/add', (req, res) =>
+{    
+    
+    let body = req.body;
+    container.items.create(body).then((itemResponse) =>
+    {
+        
+        console.log(itemResponse.statusCode);
+        res.statusCode = itemResponse.statusCode;
+        res.send({});
+
+    }).catch(ex =>
+    {
+        
+        console.log(ex);
+        const errorCode = parseInt(ex.message);
+        res.statusCode = (errorCode === NaN) ? 500 : errorCode;
+        res.send(ex);
+    });
+});
+
+_express.delete('/bkend/delete/:id', (req, res) =>
+{    
+
+    const id = req.params.id;
+    const pkey = parseInt(req.query.pk);
+    let cosmosItem = (isNaN(pkey) ? container.item(id) : container.item(id, pkey));
+    cosmosItem.delete().then((deleteResponse) =>
+    {        
+        
+        console.log(deleteResponse.statusCode);
+        res.statusCode = deleteResponse.statusCode;
+        res.send({});
+    }).catch(ex =>
+    {        
+        
+        console.log(ex);        
+        res.send(ex);
+    });
 });
 
 let httpPort = process.env.PORT || 9081;

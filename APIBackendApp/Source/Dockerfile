@@ -2,9 +2,9 @@ FROM node:16
 
 WORKDIR /apibackendapp/
 
-COPY package*.json .
+COPY package*.json ./
 RUN npm install --unsafe-perm
-COPY . .
+COPY . ./
 
 EXPOSE 9081
 EXPOSE 9443

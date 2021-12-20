@@ -53,32 +53,7 @@ _express.get('/', (req, res) =>
 
 });
 
-_express.get('/bkend', (req, res) =>
-{
-    
-    let dt = new Date();
-    const body = {};
-
-    Axios.get(process.env.API_URL)
-    .then((response) =>
-    {
-
-        const data = response.data.toString() + dt.toLocaleDateString();
-        body.data = data;
-        res.send(body);
-
-    }).catch((error) =>
-    {
-
-        const data = error.message + dt.toLocaleDateString();
-        body.data = data;
-        res.send(body);
-
-    });
-
-});
-
-_express.post('/api/post', (req, res) =>
+_express.post('/api', (req, res) =>
 {
     
     let dt = new Date();
@@ -88,23 +63,86 @@ _express.post('/api/post', (req, res) =>
 
 });
 
-_express.post('/api/post/bkend', (req, res) =>
+_express.get('/api/bkend/:id', (req, res) =>
 {
-    
-    let dt = new Date();
-    const body = {};
-
-    Axios.post(process.env.API_URL + "/api/post").then((response) =>
-    {
         
-        const data = response.data + '\n' + dt.toLocaleDateString();
+    const body = {};
+    const id = req.params.id;
+    
+    const age = req.query.age;
+    let queryParams = {params:{}};
+    queryParams.params.pk = age;
+
+    let url = `${process.env.API_URL}/bkend/${id}`;
+
+    Axios.get(url, queryParams)
+    .then((response) =>
+    {
+
+        const data = response.data;
         body.data = data;
         res.send(body);
 
     }).catch((error) =>
     {
 
-        const data = error.message + '\n' + dt.toLocaleDateString();
+        const data = error.message;
+        body.data = data;
+        res.send(body);
+
+    });
+
+});
+
+_express.post('/api/bkend/add', (req, res) =>
+{
+        
+    const body = {};
+    let url = `${process.env.API_URL}/bkend/add`;
+
+    Axios.post(url, req.body)
+    .then((response) =>
+    {
+        
+        const data = response.data;
+        body.data = data;
+        res.send(body);
+
+    }).catch((error) =>
+    {
+
+        const data = error.message;
+        body.data = data;
+        res.send(body);
+
+    });
+
+});
+
+_express.delete('/api/bkend/:id', (req, res) =>
+{
+        
+    const body = {};
+    const id = req.params.id;
+
+    const age = req.query.age;
+    let queryParams = {params:{}};
+    queryParams.params.pk = age;
+
+    let url = `${process.env.API_URL}/bkend/delete/${id}`;    
+
+    Axios.delete(url, queryParams)
+    .then((response) =>
+    {
+        
+        const data = response.data;
+        body.data = data;
+        res.send(body);
+
+    }).catch((error) =>
+    {
+
+        const data = error.message;
         body.data = data;
         res.send(body);
 

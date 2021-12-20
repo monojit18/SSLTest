@@ -27,6 +27,10 @@ deployment:
       value: ""
     - name: CERT_FILENAME
       value: ""
+    - name: COSMOSDB_ENDPOINT
+      value: ""
+    - name: COSMOSDB_KEY
+      value: ""
 service:
   name: apibkend-service
   namespace: ssltest

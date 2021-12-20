@@ -3,6 +3,6 @@
 **/Certs/**
 **/logs/**
 **/node_modules/**
-**/package*.json
+**/package-*.json
 **/.env
 !README.md

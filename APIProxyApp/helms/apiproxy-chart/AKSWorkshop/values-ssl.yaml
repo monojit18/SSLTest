@@ -15,7 +15,7 @@ deployment:
     agentpool: aksapipool
   containers:
   - name: apiproxy-app
-    image: akswkshpacr.azurecr.io/apiproxyapp:v1.0.0
+    image: akswkshpacr.azurecr.io/apiproxyapp:v1.1.2
     imagePullPolicy: IfNotPresent
     memoryRequest: "64Mi"
     cpuRequest: "100m"
@@ -24,7 +24,7 @@ deployment:
     containerPorts: [8081, 8443]    
     env:
     - name: API_URL
-      value: "https://apibkendwks.internal.wkshpdev.com"
+      value: ""
     - name: KEY_FILENAME
       value: ""
     - name: CERT_FILENAME
